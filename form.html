@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<head>
+  <title>FORM</title>
+</head>
+<body>
+<style>
+  .labels{
+    font-weight: 600;
+  }
+</style>
+<br>
+<form style="background-color:lightgray; 
+display: flex;
+flex-direction: column;
+align-self: center;
+flex-wrap: wrap;
+align-items: center;
+align-content: center;
+justify-content: center;">
+<span style="color: blue;"> Can you please provide your personal details ?</span>
+  <!-- name
+  contact no
+  email -->
+  <label for="name" class="labels">Name</label>
+  <input type="text" placeholder="Name" id="name" /> <br><br>
+  <label for="contact" class="labels">Contact Number</label>
+  <input type="number" placeholder="Contact" id="contact"/> <br><br>
+  <label for="selectCountry" class="labels">Country</label>
+  <select onchange="onChange()" id="selectCountry"> 
+      <option value="" selected>Choose a Country</option> 
+  </select> <br><br>
+  <label for="selectState" class="labels">State</label>
+  <select id="selectState"> 
+      <option value="" selected>Choose a State</option> 
+  </select> <br><br>
+  <label for="email" class="labels">Your Email</label>
+  <input type="text" placeholder="Email ID" id="email" /> <br><br>
+  <!-- <p id="error">
+  </p> -->
+  <!-- <span onclick="onSubmit()">Submit</span> -->
+  <button id="sendMessage" style="height:30px; width: 80px; margin: 4px 4px; padding: 2px 2px; background-color: green; color: white;">Submit</button>
+</form>
+
+  <script>
+		var button = document.querySelector("#sendMessage");
+		button.addEventListener("click", function () {	
+      
+      // const jsonvalidator = {
+      //   "validators" : [
+      //     {
+      //       "field": "state",
+      //       "validator" : [ { "required": true } ]
+      //     }
+      // ]
+      // };
+      
+            //name chars between 4 and 10
+      //value fetch
+      const name=document.getElementById('name').value 
+      //checks
+      if(name.length==0 || name.length<4 || name.length>10){
+        //if error parent send error
+          window.parent.postMessage(JSON.stringify({
+        name:{
+          error:"length should be between 4 and 10 chars"
+        }          
+      }), "*");
+      return;
+      }
+
+            //contact
+            const contact=document.getElementById('contact').value;
+      //checks
+      if(contact.length!=10){
+        //if error parent send error
+          window.parent.postMessage(JSON.stringify({
+        contact:{
+          error:"mobile number should be of 10 digits"
+        }          
+      }), "*");
+      return;
+      }
+
+            //country
+            const country=document.getElementById('selectCountry').value;
+      //checks
+      if(country==""){
+        //if error parent send error
+          window.parent.postMessage(JSON.stringify({
+        country:{
+          error:"Please select a country."
+        }          
+      }), "*");
+      return;
+      }
+      //state
+      const state=document.getElementById('selectState').value;
+      //checks
+      if(state==""){
+        //if error parent send error
+          window.parent.postMessage(JSON.stringify({
+        state:{
+          error:"Please select a state."
+        }          
+      }), "*");
+      return;
+      }
+
+      //email
+      var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+      if (!mailformat.test(document.getElementById('email').value)){
+        window.parent.postMessage(JSON.stringify({
+        email:{
+          error:"Please input valid email address."
+        }          
+      }), "*");
+      return;
+      }
+
+		  window.parent.postMessage(JSON.stringify({"Success":"All fields are valid"}), "*");
+		});
+</script>
+<script src="api.js"></script>
+</body>
+</html>
